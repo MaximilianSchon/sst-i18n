@@ -1,0 +1,16 @@
+{
+  "name": "@sst-i18n/core",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "arktype": "^2.0.0-rc.26",
+    "electrodb": "^3.0.1",
+    "sst": "^3.3.56"
+  }
+}
