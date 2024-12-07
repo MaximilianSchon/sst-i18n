@@ -1,4 +1,4 @@
-new sst.aws.Dynamo("Database", {
+export const db = new sst.aws.Dynamo("Database", {
     fields: {
         pk: "string", // probably lang
         sk: "string" // probably key

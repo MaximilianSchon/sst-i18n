@@ -10,5 +10,7 @@ export default $config({
   },
   async run() {
     const table = await import("./infra/db");
+    const bucket = await import("./infra/bucket");
+    const api = await import("./infra/api");
   },
 });

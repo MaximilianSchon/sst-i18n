@@ -1,5 +1,5 @@
 {
-  "name": "aws-hono",
+  "name": "@sst-i18n/api",
   "type": "module",
   "scripts": {
     "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
@@ -12,6 +12,8 @@
     "npm-run-all2": "^6.2.0"
   },
   "dependencies": {
-    "hono": "^4.6.13"
+    "@types/aws-lambda": "^8.10.146",
+    "hono": "^4.6.13",
+    "@sst-i18n/core": "workspace:*"
   }
 }

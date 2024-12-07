@@ -12,5 +12,9 @@
     "arktype": "^2.0.0-rc.26",
     "electrodb": "^3.0.1",
     "sst": "^3.3.56"
+  },
+  "exports": {
+    ".": "./index.ts",
+    "./ark": "./ark.ts"
   }
 }

@@ -6,10 +6,10 @@ const client = new DynamoDBClient();
 
 const table = Resource.Database.name;
 
-export const Translation = new Entity(
+export const Language = new Entity(
     {
         model: {
-            entity: "translation",
+            entity: "language",
             version: "1",
             service: "localization",
         },
@@ -17,31 +17,23 @@ export const Translation = new Entity(
             language: {
                 type: "string",
             },
-            namespace: {
-                type: "string",
-            },
-            version: {
-                type: "string",
-            },
-            key: {
-                type: "string",
-            },
-            translation: {
-                type: "string",
-            },
             projectId: {
                 type: "string",
+            },
+            shouldMachineTranslate: {
+                type: "boolean",
+                default: false
             }
         },
         indexes: {
-            byLanguage: {
+            byProjectId: {
                 pk: {
                     field: "pk",
-                    composite: ["projectId", "version", "language", "namespace"],
+                    composite: ["projectId"],
                 },
                 sk: {
                     field: "sk",
-                    composite: ["key"],
+                    composite: ["language"],
                 },
             },
         },
@@ -49,13 +41,10 @@ export const Translation = new Entity(
     { client, table },
 );
 
-export const TranslationDefinition = type({
+export const LanguageDefinition = type({
     language: "string",
-    key: "string",
-    translation: "string",
-    namespace: "string",
-    version: "string",
-    projectId: "string"
+    projectId: "string",
+    shouldMachineTranslate: "boolean"
 });
 
-export type TranslationType = typeof TranslationDefinition.infer;
+export type LanguageType = typeof LanguageDefinition;
