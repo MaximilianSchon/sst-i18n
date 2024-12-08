@@ -7,8 +7,9 @@ import {
 import { Meta, Scripts } from '@tanstack/start'
 import type { ReactNode } from 'react'
 import css from "@/styles/main.css?url"
+import { createClient } from "@openauthjs/openauth"
 
-export const Route = createRootRouteWithContext()({
+export const Route = createRootRouteWithContext<{ user?: { email: string } }>()({
     head: () => ({
         meta: [
             {
@@ -25,7 +26,13 @@ export const Route = createRootRouteWithContext()({
         links: [{ rel: "stylesheet", href: css }],
     }),
     component: RootComponent,
-
+    beforeLoad: async ({ context, location }) => {
+        if (!context.user) {
+            const client = createClient("my-client", {
+                issuer: Resource.Router.url,
+            })
+        }
+    },
 })
 
 function RootComponent() {
