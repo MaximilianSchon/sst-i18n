@@ -11,7 +11,7 @@
   "dependencies": {
     "arktype": "^2.0.0-rc.26",
     "electrodb": "^3.0.1",
-    "sst": "^3.3.56"
+    "sst": "3.3.59"
   },
   "exports": {
     ".": "./index.ts",

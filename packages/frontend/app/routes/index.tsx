@@ -1,5 +1,5 @@
 // app/routes/index.tsx
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter, useSearch } from '@tanstack/react-router'
 
 import * as React from "react"
 import { TranslationDefinition, type TranslationType } from "@sst-i18n/core/translation.definition"
@@ -16,6 +16,7 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
+    type RowData,
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
@@ -37,15 +38,50 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose, DialogFooter } from '@/components/ui/dialog'
-import { ArkErrors } from 'arktype'
-import { createTranslation, getTranslations } from '@/server/translations'
+import { ark, ArkErrors, type } from 'arktype'
+import { createTranslation, searchTranslations, updateTranslation, updateTranslationKey } from '@/server/translations'
 import { Label } from '@/components/ui/label'
 
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData extends RowData> {
+        updateData: (rowIndex: number, columnId: string, value: unknown) => void
+    }
+}
 
+// Give our default column cell renderer editing superpowers!
+const defaultColumn: Partial<ColumnDef<TranslationType>> = {
+    cell: ({ getValue, row: { index }, column: { id }, table }) => {
+        const initialValue = getValue()
+        // We need to keep and update the state of the cell normally
+        const [value, setValue] = React.useState(initialValue)
+
+        // When the input is blurred, we'll call our table meta's updateData function
+        const onBlur = () => {
+            table.options.meta?.updateData(index, id, value)
+        }
+
+        // If the initialValue is changed external, sync it up with our state
+        React.useEffect(() => {
+            setValue(initialValue)
+        }, [initialValue])
+
+        return (
+            <Input
+                value={value as string}
+                onChange={e => setValue(e.target.value)}
+                onBlur={onBlur}
+            />
+        )
+    },
+}
+const searchDef = type({
+    "filter?": "string"
+})
 
 export const Route = createFileRoute('/')({
+    validateSearch: searchDef,
     component: DataTableDemo,
-    loader: async () => await getTranslations(),
+    loader: async (opts) => await searchTranslations({ data: { filter: opts.location.search?.filter } }),
 })
 
 
@@ -76,9 +112,9 @@ export const columns: ColumnDef<TranslationType>[] = [
     {
         accessorKey: "key",
         header: "Key",
-        cell: ({ row }) => (
-            <div>{row.getValue("key")}</div>
-        ),
+        // cell: ({ row }) => (
+        //     <div>{row.getValue("key")}</div>
+        // ),
     },
     {
         accessorKey: "translation",
@@ -93,7 +129,7 @@ export const columns: ColumnDef<TranslationType>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => <div>{row.getValue("translation")}</div>,
+        // cell: ({ row }) => <div>{row.getValue("translation")}</div>,
     }
 ]
 
@@ -102,14 +138,18 @@ export function DataTableDemo() {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
     )
+    const search = Route.useSearch();
+    const navigate = useNavigate({ from: Route.fullPath })
+
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
     const { data, cursor } = Route.useLoaderData()
-
+    const router = useRouter();
     const table = useReactTable({
         data,
         columns,
+        defaultColumn,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -124,6 +164,30 @@ export function DataTableDemo() {
             columnVisibility,
             rowSelection,
         },
+        meta: {
+            updateData: async (rowIndex, columnId, value) => {
+                if (typeof value !== "string") return
+                // Skip page index reset until after next rerender
+                //   skipAutoResetPageIndex()
+                const row = table.getRowModel().rows[rowIndex]
+                if (columnId === "key") {
+                    await updateTranslationKey({
+                        data: {
+                            ...row.original,
+                            newKey: value,
+                        }
+                    })
+                } else {
+                    await updateTranslation({
+                        data: {
+                            ...row.original,
+                            translation: value,
+                        }
+                    })
+                }
+                router.invalidate();
+            },
+        },
 
     })
     return (
@@ -131,42 +195,13 @@ export function DataTableDemo() {
             <div className="flex space-x-2 py-4">
                 <Input
                     placeholder="Filter keys..."
-                    value={(table.getColumn("key")?.getFilterValue() as string) ?? ""}
+                    value={search.filter}
                     onChange={(event) =>
-                        table.getColumn("key")?.setFilterValue(event.target.value)
+                        navigate({ search: { filter: event.target.value } })
                     }
                     className="max-w-sm"
                 />
-                <div className='space-x-2'>
-
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="ml-auto">
-                                Columns <ChevronDown />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            {table
-                                .getAllColumns()
-                                .filter((column) => column.getCanHide())
-                                .map((column) => {
-                                    return (
-                                        <DropdownMenuCheckboxItem
-                                            key={column.id}
-                                            className="capitalize"
-                                            checked={column.getIsVisible()}
-                                            onCheckedChange={(value) =>
-                                                column.toggleVisibility(!!value)
-                                            }
-                                        >
-                                            {column.id}
-                                        </DropdownMenuCheckboxItem>
-                                    )
-                                })}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <CreateTranslationDialog />
-                </div>
+                <CreateTranslationDialog />
             </div>
             <div className="rounded-md border">
                 <Table>

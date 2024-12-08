@@ -12,8 +12,10 @@
     "npm-run-all2": "^6.2.0"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.705.0",
+    "@sst-i18n/core": "workspace:*",
     "@types/aws-lambda": "^8.10.146",
     "hono": "^4.6.13",
-    "@sst-i18n/core": "workspace:*"
+    "sst": "3.3.59"
   }
 }

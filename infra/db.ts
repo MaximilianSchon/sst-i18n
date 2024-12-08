@@ -3,5 +3,6 @@ export const db = new sst.aws.Dynamo("Database", {
         pk: "string", // probably lang
         sk: "string" // probably key
     },
-    primaryIndex: { hashKey: "pk", rangeKey: "sk" }
+    primaryIndex: { hashKey: "pk", rangeKey: "sk" },
+    stream: "new-and-old-images"
 })
