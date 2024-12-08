@@ -6,6 +6,11 @@ export default $config({
       name: "sst-i18n",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
+      providers: {
+        aws: {
+          region: "eu-north-1",
+        }
+      },
     };
   },
   async run() {
