@@ -15,6 +15,10 @@
   },
   "exports": {
     ".": "./index.ts",
-    "./ark": "./ark.ts"
+    "./ark": "./ark.ts",
+    "./translation": "./translation.ts",
+    "./translation.definition": "./translation.definition.ts",
+    "./language": "./language.ts",
+    "./project": "./project.ts"
   }
 }

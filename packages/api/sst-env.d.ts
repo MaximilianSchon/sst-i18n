@@ -6,10 +6,6 @@ import "sst"
 export {}
 declare module "sst" {
   export interface Resource {
-    "Api": {
-      "type": "sst.aws.Router"
-      "url": string
-    }
     "ApiFn": {
       "name": string
       "type": "sst.aws.Function"
@@ -18,6 +14,14 @@ declare module "sst" {
     "Database": {
       "name": string
       "type": "sst.aws.Dynamo"
+    }
+    "Frontend": {
+      "type": "sst.aws.TanstackStart"
+      "url": string
+    }
+    "Router": {
+      "type": "sst.aws.Router"
+      "url": string
     }
     "Storage": {
       "name": string

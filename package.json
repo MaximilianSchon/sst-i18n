@@ -1,14 +1,14 @@
 {
   "name": "sst-i18n",
   "module": "index.ts",
-  "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  }
+  },
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ]
 }

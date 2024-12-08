@@ -1,11 +1,12 @@
 import { bucket } from "./bucket";
+import { frontend } from "./frontend";
 
 export const apiFn = new sst.aws.Function("ApiFn", {
     handler: "packages/api/src/index.handler",
     url: true
 })
 
-export const api = new sst.aws.Router("Api", {
+export const api = new sst.aws.Router("Router", {
     routes: {
         "/*": {
             bucket
@@ -13,7 +14,8 @@ export const api = new sst.aws.Router("Api", {
         "/private/*": apiFn.url,
         "/languages/*": apiFn.url,
         "/missing/*": apiFn.url,
-        "/update/*": apiFn.url
+        "/update/*": apiFn.url,
+        "/admin": frontend.url
     }
 })
 

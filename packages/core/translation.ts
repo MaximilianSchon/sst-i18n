@@ -1,7 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { Entity } from "electrodb";
 import { Resource } from "sst";
-import { type } from "arktype";
 const client = new DynamoDBClient();
 
 const table = Resource.Database.name;
@@ -25,12 +24,27 @@ export const Translation = new Entity(
             },
             key: {
                 type: "string",
+                set: (key) => key?.toLowerCase(),
             },
             translation: {
                 type: "string",
             },
             projectId: {
                 type: "string",
+            },
+            createdAt: {
+                type: "number",
+                readOnly: true,
+                required: true,
+                default: () => Date.now(),
+                set: () => Date.now(),
+            },
+            updatedAt: {
+                type: "number",
+                watch: "*",
+                required: true,
+                default: () => Date.now(),
+                set: () => Date.now(),
             }
         },
         indexes: {
@@ -49,13 +63,4 @@ export const Translation = new Entity(
     { client, table },
 );
 
-export const TranslationDefinition = type({
-    language: "string",
-    key: "string",
-    translation: "string",
-    namespace: "string",
-    version: "string",
-    projectId: "string"
-});
 
-export type TranslationType = typeof TranslationDefinition.infer;
