@@ -9,16 +9,18 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.699.0",
+    "@openauthjs/openauth": "^0.0.18",
     "arktype": "^2.0.0-rc.26",
     "electrodb": "^3.0.1",
     "sst": "3.3.59"
   },
   "exports": {
-    ".": "./index.ts",
-    "./ark": "./ark.ts",
-    "./translation": "./translation.ts",
-    "./translation.definition": "./translation.definition.ts",
-    "./language": "./language.ts",
-    "./project": "./project.ts"
+    ".": "./src/index.ts",
+    "./arktype": "./src/arktype.ts",
+    "./translation": "./src/translation.ts",
+    "./translation.definition": "./src/translation.definition.ts",
+    "./language": "./src/language.ts",
+    "./project": "./src/project.ts"
   }
 }

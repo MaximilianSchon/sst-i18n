@@ -1,3 +1,4 @@
+import { authFn } from "./auth";
 import { bucket } from "./bucket";
 import { frontend } from "./frontend";
 
@@ -40,7 +41,8 @@ export const api = new sst.aws.Router("Router", {
         "/languages/*": apiFn.url,
         "/missing/*": apiFn.url,
         "/update/*": apiFn.url,
-        "/admin": frontend.url
+        "/admin/*": frontend.url,
+        "/auth/*": authFn.url
     },
     domain: $app.stage === "production" ? "translations.solenergikvalitet.se" : undefined,
     transform: {

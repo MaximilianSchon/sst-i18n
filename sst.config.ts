@@ -19,5 +19,6 @@ export default $config({
     const api = await import("./infra/api");
     const frontend = await import("./infra/frontend");
     const streams = await import("./infra/streams");
+    const auth = await import("./infra/auth");
   }
 })

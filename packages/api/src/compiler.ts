@@ -4,7 +4,7 @@ import { type } from "arktype";
 import { LanguageDefinition, LanguageType } from "@sst-i18n/core/language";
 import { db } from "@sst-i18n/core";
 import { ProjectDefinition, ProjectType } from "@sst-i18n/core/project";
-import { arktype } from "@sst-i18n/core/ark";
+import { arktype } from "@sst-i18n/core/arktype";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Resource } from "sst";
 import { unmarshall as unmarshallDynamo } from "@aws-sdk/util-dynamodb";

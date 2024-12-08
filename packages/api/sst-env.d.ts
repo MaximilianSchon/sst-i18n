@@ -11,9 +11,23 @@ declare module "sst" {
       "type": "sst.aws.Function"
       "url": string
     }
+    "Auth": {
+      "publicKey": string
+      "type": "sst.aws.Auth"
+    }
+    "AuthAuthenticator": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
     "Database": {
       "name": string
       "type": "sst.aws.Dynamo"
+    }
+    "Email": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
     }
     "Frontend": {
       "type": "sst.aws.TanstackStart"
