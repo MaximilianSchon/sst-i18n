@@ -20,7 +20,7 @@ export default $config({
               .replace(/-$/g, ""),
             runner: {
               engine: "codebuild",
-              compute: "medium",
+              compute: "small",
               timeout: "1 hour",
             },
           };
