@@ -1,4 +1,3 @@
-import { authFn } from "./auth";
 import { bucket } from "./bucket";
 import { frontend } from "./frontend";
 
@@ -42,9 +41,8 @@ export const api = new sst.aws.Router("Router", {
         "/missing/*": apiFn.url,
         "/update/*": apiFn.url,
         "/admin/*": frontend.url,
-        "/auth/*": authFn.url
     },
-    domain: $app.stage === "production" ? "translations.solenergikvalitet.se" : undefined,
+    domain: $app.stage === "production" ? "translations.solenergikvalitet.se" : `translations.${$app.stage}.solenergikvalitet.se`,
     transform: {
         cdn: (opts) => {
             const cache = $resolve(opts.defaultCacheBehavior)

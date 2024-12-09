@@ -3,11 +3,13 @@ import {
     Outlet,
     ScrollRestoration,
     createRootRouteWithContext,
+    redirect,
 } from '@tanstack/react-router'
 import { Meta, Scripts } from '@tanstack/start'
 import type { ReactNode } from 'react'
 import css from "@/styles/main.css?url"
-import { createClient } from "@openauthjs/openauth"
+import { handleAuth } from '@/server/auth'
+
 
 export const Route = createRootRouteWithContext<{ user?: { email: string } }>()({
     head: () => ({
@@ -27,12 +29,12 @@ export const Route = createRootRouteWithContext<{ user?: { email: string } }>()(
     }),
     component: RootComponent,
     beforeLoad: async ({ context, location }) => {
-        if (!context.user) {
-            const client = createClient("my-client", {
-                issuer: Resource.Router.url,
-            })
+        const session = await handleAuth({ data: { code: location.search?.code } })
+        return {
+            user: session
         }
     },
+
 })
 
 function RootComponent() {

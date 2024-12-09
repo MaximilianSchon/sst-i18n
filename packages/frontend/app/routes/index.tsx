@@ -1,5 +1,5 @@
 // app/routes/index.tsx
-import { createFileRoute, useNavigate, useRouter, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter, useRouterState, useSearch } from '@tanstack/react-router'
 
 import * as React from "react"
 import { TranslationDefinition, type TranslationType } from "@sst-i18n/core/translation.definition"
@@ -139,6 +139,7 @@ export function DataTableDemo() {
         []
     )
     const search = Route.useSearch();
+    const { user } = Route.useRouteContext();
     const navigate = useNavigate({ from: Route.fullPath })
 
     const [columnVisibility, setColumnVisibility] =
@@ -192,6 +193,7 @@ export function DataTableDemo() {
     })
     return (
         <div className="w-full">
+            Hej, {user.email}
             <div className="flex space-x-2 py-4">
                 <Input
                     placeholder="Filter keys..."
