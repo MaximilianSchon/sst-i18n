@@ -11,7 +11,7 @@ export const authFn = new sst.aws.Auth("AuthFn", {
 })
 
 export const authRouter = new sst.aws.Router("Auth", {
-    domain: $app.stage === "production" ? "auth.translations.solenergikvalitet.se" : `auth.translations.${$app.stage}.solenergikvalitet.se`,
+    domain: $app.stage === "main" ? "auth.translations.solenergikvalitet.se" : `auth.translations.${$app.stage}.solenergikvalitet.se`,
     routes: {
         "/*": authFn.url
     }
