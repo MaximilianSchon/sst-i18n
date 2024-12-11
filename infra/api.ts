@@ -42,7 +42,7 @@ export const api = new sst.aws.Router("Router", {
         "/update/*": apiFn.url,
         "/admin/*": frontend.url,
     },
-    domain: $app.stage === "production" ? "translations.solenergikvalitet.se" : `translations.${$app.stage}.solenergikvalitet.se`,
+    domain: $app.stage === "main" ? "translations.solenergikvalitet.se" : `translations.${$app.stage}.solenergikvalitet.se`,
     transform: {
         cdn: (opts) => {
             const cache = $resolve(opts.defaultCacheBehavior)
